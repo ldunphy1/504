@@ -15,16 +15,16 @@ struct node {
 
 struct node* treap_INITIALIZE();
 void treap_INSERT(struct node*, int);
+void treap_DELETE(struct node*, int);
 void leftR(struct node*);
 void rightR(struct node*);
+
 struct node* root;
 
 int main()
 {
 	return 0;
 }
-
-
 
 void leftR(struct node* n)
 {
@@ -55,26 +55,73 @@ struct node* treap_INITIALIZE()
 	return initial_node;
 }
 
-void treap_INSERT(struct node* element, int data)
+
+void treap_DELETE(struct node* element, int value)
+{
+	if (element == NULL)
+	{
+		printf("Element does not exist, cannot be deleted!\n");
+	}
+	
+	if (value > element->data)
+		treap_DELETE(element->right, value); // recursively go right
+	else if (value < element->data)
+		treap_DELETE(element->left, value); // recursively go left down the tree
+	else
+	{
+		if (element->left == NULL && element->right == NULL)
+		{
+			delete element; // if no children exists, destination reached, delete node
+			element = NULL; // set that node to NULL to eliminate free address
+		}
+		else if (element->left = NULL) // case of right child
+		{
+			struct node* temp = element; // hold elements value
+			element = element->right; // move the right child up. 
+			delete temp; // delete from memory
+		}
+		else if (element->right = NULL) // case of left child
+		{
+			struct node* temp = element; 
+			element = element->left;
+			delete temp;
+		}
+		else
+		{	// rotation
+			if (element->left->adjust < element->right->adjust)
+			{
+				leftR(element); // rotate left
+				treap_DELETE(element->left, value);
+			}
+			else
+			{
+				rightR(element);
+				treap_DELETE(element->right, value);
+			}
+		}
+	}
+}
+
+void treap_INSERT(struct node* element, int value)
 {
 	if(element == NULL)
 	{
 		element = new node();
 		element->left = element->right = NULL; // initialize with NULL pointer
-		element->key = data;
-		adjust = rand();
+		element->data = value;
+		element->adjust = rand();
 	}
 	else
 	{
-		if (element->key == data)
+		if (element->data == value)
 		{
-			return 0;	
+			printf("Data already exists, cannot be added!\n");	
 		}
 		else
 		{
-			if (data < element->key)
+			if (value < element->data)
 			{
-				treap_INSERT(element->left,data); // recursive call
+				treap_INSERT(element->left,value); // recursive call
 				if (element->left->adjust > element->adjust)
 				{
 					rightR(element); // need to implement
@@ -82,7 +129,7 @@ void treap_INSERT(struct node* element, int data)
 			}
 			else
 			{
-				treap_INSERT(element->right, data);
+				treap_INSERT(element->right, value);
 				if (element->right->adjust > element->adjust)
 				{
 					leftR(element);
