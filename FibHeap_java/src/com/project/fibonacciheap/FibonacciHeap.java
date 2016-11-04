@@ -8,11 +8,17 @@ import java.lang.Number;
  */
 
 
-//Java Implementation of a Fibonacci Heap Data Structure
-    // EC504 Data Structures Project
+/*
+    Java Implementation of a Fibonacci Heap Data Structure
+    EC504 Data Structures Project
+    Follow steps according to pseudo code on pgs 505-519 of CLRS
+*/
 
 
-public class FibonacciHeap<Integer> {
+//Data structure is ordered based on Value not based on Key
+    // I think this is wrong but for showing how it works will do it this way for now
+
+public class FibonacciHeap<T> { // generic type
 
     private FibHeapNode root;
     private FibHeapNode min; //points to min element in heap
@@ -53,7 +59,7 @@ public class FibonacciHeap<Integer> {
         node.left = node;
         node.mark = false;
 
-        System.out.print("\nWe inserted " + node.getValue().toString());
+        System.out.print("\nWe inserted:\nkey: " + node.getKey() + ", " + node.getValue());
         /*System.out.print("\nType of: " + node.getValue().toString().getClass().getName());
         System.out.print("\nParseInt: " + java.lang.Integer.parseInt(node.getValue().toString()));*/
 
@@ -99,11 +105,18 @@ public class FibonacciHeap<Integer> {
         return min; //return pointer to minimum element
     }
 
-    public void delete(int element)
+    public void delete(FibHeapNode node)
     {
-        //Delete Key
-        //Call consolidate
+        // call Decrease Key to -inf
 
+        this.decreaseKey(node, Integer.MIN_VALUE);
+        this.deleteMin();
+
+    }
+
+    public int size()
+    {
+        return count;
     }
 
     public FibHeapNode deleteMin()
@@ -159,13 +172,12 @@ public class FibonacciHeap<Integer> {
 
     private void consolidate()
 
-            /*
-                need to determine how to take it apart and then put back together via a new
-                Array List ??? no idea how forget how this works slash im tired as fuck
-             */
     {
         //Consolidate according to fib heap rules
-        ArrayList<Integer> tempList = new ArrayList<Integer>(); // make temp list to store stuff in
+        ArrayList<FibHeapNode> tempList = new ArrayList<>(); // make temp list to store stuff in
+        for (int i = 0; i < min.nodelist().size(); i++){
+            tempList.add(null); // fill new array with null values
+        }
 
         if (min != null)
         {
@@ -174,28 +186,40 @@ public class FibonacciHeap<Integer> {
                 FibHeapNode x = (FibHeapNode)cur; // store current at x
                 int dx = x.degree; // degree of node in root list
 
-                //compare degrees of nodes in list
-                int dm = min.degree;
-                if (dx == dm) // degrees are same so compare node values
+                while (tempList.get(dx) != null)
                 {
-                    System.out.print("\nDx: " + dx);
-                    System.out.print(" Dm: " + dm);
-
-                    if (java.lang.Integer.parseInt(x.getValue().toString()) <
-                                java.lang.Integer.parseInt(min.getValue().toString()))
+                    FibHeapNode y = tempList.get(dx);
+                    if(java.lang.Integer.parseInt(x.getValue().toString()) >
+                            java.lang.Integer.parseInt(y.getValue().toString()))
                     {
-                        // x is smaller so it becomes parent of next
-                        System.out.print("\nCase min is bigger");
-                        this.makeChild(x,min);
+                        // x is bigger so it becomes child
+                        FibHeapNode temp = x;
+                        x = y;
+                        y = temp; // exchange x and y
                     }
-                    else
+                    this.makeChild(x,y);
+                    tempList.set(dx, null);
+                    dx++;
+                }
+                tempList.set(dx, x);
+
+                min = null;
+
+            } //end iteration of Root List
+
+            for(int i = 0; i < tempList.size();i++)
+            {
+                if (tempList.get(i) != null)
+                {
+                    min = addToRoot(min, tempList.get(i));
+                    if (min == null || java.lang.Integer.parseInt(tempList.get(i).getValue().toString())
+                            < java.lang.Integer.parseInt(min.getValue().toString()))
                     {
-                        System.out.print("\nCase min is still min");
-                        this.makeChild(min,x); // min is smaller so make it parent
+                        min = tempList.get(i); // reassign min pointer
                     }
                 }
-
             }
+
         }
 
 
@@ -216,10 +240,69 @@ public class FibonacciHeap<Integer> {
         node.mark = false; //mark is set to false
     }
 
-    public void decreaseKey(int key, int newKey)
+    public void decreaseKey(FibHeapNode key, Integer newKey)
     {
         //modify Fib Heap to decrease key value
         //Call Consolidate
+
+        if( java.lang.Integer.parseInt(newKey.toString()) >
+                java.lang.Integer.parseInt(key.getValue().toString()))
+        {
+            System.out.print("\nERROR:\nNew Key Greater Than Original");
+            return;
+        }
+
+        key.value = newKey;
+
+        FibHeapNode y = key.parent;
+
+        /*
+            Check if key is root aka parent is null and also check to see if
+            the newKey is still smaller than parent... if it is we cut it from
+            its parent and add it to the root list
+         */
+
+        if(y != null && java.lang.Integer.parseInt(key.getValue().toString())
+                < java.lang.Integer.parseInt(y.getValue().toString()))
+        {
+            //call cut
+            //call cascading cut
+            this.cut(key, y);
+            this.cascadingCut(y);
+        }
+
+
+    }
+
+    private void cut(FibHeapNode child, FibHeapNode parent)
+    {
+        // cut link between child and parent nodes
+        parent.child = removeNode(parent.child, child);
+        parent.degree--; // decrement parents degree
+        min = addToRoot(min, child); // add child to root list
+
+        child.parent = null; // child has no parent anymore wahh
+        child.mark = false;
+
+    }
+
+    private void cascadingCut(FibHeapNode node)
+    {
+        FibHeapNode z = node.parent; // store z as parent node
+
+        if (z != null)
+        {
+            // node has a parent
+            if (node.mark == false)
+            {
+                node.mark = true;
+            }
+            else
+            {
+                this.cut(node, z);
+                this.cascadingCut(z);
+            }
+        }
     }
 
     public void mergeHeap(FibonacciHeap heapOne, FibonacciHeap heapTwo){
@@ -227,5 +310,6 @@ public class FibonacciHeap<Integer> {
         // method to merge two Fibonacci Heaps together
 
     }
+
 
 }

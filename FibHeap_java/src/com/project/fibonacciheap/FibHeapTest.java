@@ -11,7 +11,6 @@ public class FibHeapTest {
 
             System.out.println("FibonacciHeap Test\n\n");
             FibonacciHeap fh = new FibonacciHeap<Integer>();
-            ArrayList<FibHeapNode> arr = new ArrayList<FibHeapNode>();
 
             for (int i = 15; i > 0; i--) {
                 FibHeapNode node = new FibHeapNode(i, (int) Math.floor(Math.random() * i*200)); // populate random array
@@ -19,10 +18,9 @@ public class FibHeapTest {
                 //System.out.print("\n\nThe min is: " + fh.getMin().getValue());
             }
 
-            System.out.print("\n\nThe min is: " + fh.getMin().getValue());
+            System.out.print("\n\nThe min is: " + fh.getMin().getKey());
             fh.deleteMin();
-            System.out.print("\n\nNew min is: " + fh.getMin().getValue());
-
+            System.out.print("\n\nNew min is: " + fh.getMin().getKey());
 
         }
 }

@@ -1,8 +1,5 @@
 package com.project.fibonacciheap;
-
 import com.google.common.collect.Lists;
-//import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import java.util.ArrayList;
 
 
@@ -44,11 +41,11 @@ public class FibHeapNode<Integer> {
             return value;
         }
 
-    // List of Data in Structure
+    // Iterator for Data Structure
 
     public ArrayList<FibHeapNode<Integer>> nodelist()
     {
-        ArrayList<FibHeapNode<Integer>> list = Lists.newArrayList();
+        ArrayList<FibHeapNode<Integer>> list = Lists.newArrayList(); // use google guava Lists wrapper for Array List declaration
         list.add(this);
         FibHeapNode<Integer> next = right;
         while (next != this) {
