@@ -45,29 +45,53 @@ class BinomialHeap():
         n = minnode.child
         n.parent = None
         
-        while n.sibling != None:
-            nextnode = n.sibling
-            nextnode.sibling = n
-            n = nextnode
-            n.parent = None
+        prev = None
+        current = n
+        nxt = n.sibling
+        current.parent = None
+        
+        while nxt != None:
+            current.sibling = prev
+            current.parent = None
+            
+            prev = current  
+            current = nxt 
+            nxt = current.sibling 
+            
+        current.sibling = prev
+        current.parent = None
             
         '''set last child as head of temp heap'''    
-        h.head = n
+        h.head = current
         
         '''remove minimum from root list'''
         self.head = minnode.sibling
-        del(minnode)   
         self.union(h)
         
         '''return extracted value'''
         return minkey
         
-    def decrease_key():
-        pass
-    
-    def delete():
-        pass
-    
+    def decrease_key(self,n,value):
+        if n.value < value:
+            print('Error, new key larger than old key')
+            return
+            
+        n.value = value
+        y = n
+        z = y.parent
+        
+        while z != None and y.value < z.value:
+            tempval = y.value
+            y.value = z.value
+            z.value = tempval
+            y = z
+            z = y.parent
+            
+    def delete(self,n):
+        self.decrease_key(n,float('-inf'))
+        self.extract_min()
+
+
     def link(self,y,z):
         y.parent = z
         y.sibling = z.child
@@ -99,14 +123,13 @@ class BinomialHeap():
             if a.sibling == None:
                 '''first list only has head, simply append it to second list'''
                 a.sibling = b
-                print('1')
                 return self.head
                 
             elif a.sibling.degree < b.degree:
                 '''a's sibling is smaller degree than other choice. Make sibling 
                 next root to compare to b'''
                 a = a.sibling
-                print('2')
+
             else:
                 '''b is smaller or the same degree as a. Make b's sibling next 
                 comparison, and put b next to a in combined rootlist'''
@@ -115,7 +138,7 @@ class BinomialHeap():
                 a.sibling = b
                 a = a.sibling
                 b = c
-                print('3')
+
                 
         del H2
         return self.head
@@ -136,13 +159,11 @@ class BinomialHeap():
             if (x.degree != after.degree) or (after.sibling != None and after.sibling.degree == x.degree):
                 prev = x
                 x = after
-                print('here1')
             else:
                 if x.value <= after.value:
 
                     x.sibling = after.sibling
                     self.link(after,x)
-                    print('here2')
                 else:
                     if prev == None:
                         H.head = after
