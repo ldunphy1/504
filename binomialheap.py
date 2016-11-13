@@ -25,32 +25,53 @@ class BinomialHeap():
         n = node(key)
         temp.head = n
         self.union(temp)
-    
-    def extract_min(H):
-        n = H.head
-        minkey = n.key
+
+    def extract_min(self):
+        n = self.head
+        minkey = n.value
         minnode = n
+        
+        '''find minimum node in root list'''
         while n.sibling != None:
             nextnode = n.sibling
-            nextkey = nextnode.key
+            nextkey = nextnode.value
             if nextkey < minkey:
                 minkey = nextkey
                 minnode = nextnode
             n = nextnode
         
-        '''in progress'''
+        '''reverse minimum node's children'''
         h = BinomialHeap()
-    
+        n = minnode.child
+        n.parent = None
+        
+        while n.sibling != None:
+            nextnode = n.sibling
+            nextnode.sibling = n
+            n = nextnode
+            n.parent = None
+            
+        '''set last child as head of temp heap'''    
+        h.head = n
+        
+        '''remove minimum from root list'''
+        self.head = minnode.sibling
+        del(minnode)   
+        self.union(h)
+        
+        '''return extracted value'''
+        return minkey
+        
     def decrease_key():
         pass
     
     def delete():
         pass
     
-    def link(y,z):
+    def link(self,y,z):
         y.parent = z
         y.sibling = z.child
-        z.children.append(y)
+        z.child = y
         z.degree += 1
         
     def merge(self,H2):
@@ -63,9 +84,7 @@ class BinomialHeap():
         b = H2.head
     
         '''choose head of combined rootlist to be smaller of the two list heads'''
-        if a.degree <= b.degree:
-            self.head = a
-        elif b.degree < a.degree:
+        if b.degree < a.degree:
             self.head = b
         
         if self.head == b:
@@ -80,12 +99,14 @@ class BinomialHeap():
             if a.sibling == None:
                 '''first list only has head, simply append it to second list'''
                 a.sibling = b
+                print('1')
                 return self.head
                 
             elif a.sibling.degree < b.degree:
                 '''a's sibling is smaller degree than other choice. Make sibling 
                 next root to compare to b'''
                 a = a.sibling
+                print('2')
             else:
                 '''b is smaller or the same degree as a. Make b's sibling next 
                 comparison, and put b next to a in combined rootlist'''
@@ -94,12 +115,13 @@ class BinomialHeap():
                 a.sibling = b
                 a = a.sibling
                 b = c
+                print('3')
                 
         del H2
         return self.head
         
     def union(self,H2):
-        H = BinomialHeap()        
+        H = self     
         H.head = self.merge(H2)
     
         if H.head == None:
@@ -107,26 +129,34 @@ class BinomialHeap():
         
         prev = None
         x = H.head
-        nxt = x.sibling
-        
-        while nxt != None:
-            if (x.degree != nxt.degree) or (nxt.sibling != None and nxt.sibling.degree == x.degree):
-                prev = x
-                x = nxt
-                
-            elif x.value <= nxt.value:
-                x.sibling = nxt.sibling
-                link(nxt,x)
-                
-            elif prev == None:
-                H.head = nxt
-            else:
-                prev.sibling = nxt
-                link(x,nxt)
-                x = nxt
-            
-            nxt = x.sibling
+        after = x.sibling
 
+        
+        while after != None:
+            if (x.degree != after.degree) or (after.sibling != None and after.sibling.degree == x.degree):
+                prev = x
+                x = after
+                print('here1')
+            else:
+                if x.value <= after.value:
+
+                    x.sibling = after.sibling
+                    self.link(after,x)
+                    print('here2')
+                else:
+                    if prev == None:
+                        H.head = after
+
+                    else:
+                        prev.sibling = after
+                        
+                    self.link(x,after)
+                    x = after
+                                  
+            after = x.sibling
+
+
+        
 def minimum(self,H):
     
     y = None
