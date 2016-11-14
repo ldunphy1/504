@@ -1,3 +1,7 @@
+'''References: 
+http://users.cecs.anu.edu.au/~Alistair.Rendell/Teaching/apac_comp3600/
+https://brilliant.org/wiki/fibonacci-heap/ '''
+
 import math
 
 class FibHeap:
