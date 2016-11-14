@@ -1,7 +1,10 @@
 """
-fib heap implementation 
+Fib Heap implementation
+
+would like to implement better way to iterate that is faster
 
 """
+import math
 
 class FibHeap:
 
@@ -136,6 +139,11 @@ class FibHeap:
 
 		head.degree += 1
 		node.mark = False #set mark to false
+
+	def delete(self,node):
+		
+		self.decreaseKey(node,-math.inf)
+		self.extractMin()
 
 
 	def decreaseKey(self, key, newKey):
