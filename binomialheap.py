@@ -16,9 +16,29 @@ class node():
         self.sibling = None
         
         
+    def __str__(self,indent=0):
+        '''Basic printout for nodes in tree. Level of indentation = depth in tree.
+        For each new line, +1 indentation indicates a child node.  -1 indentation
+        indicates moving to a different branch in a tree.  0 indentation indicates
+        a root node and thus any +indentation will be part of that root's tree
+        until the next root node occurs.'''
+        
+        ret = "  "*level+str(self.value)
+        
+        if self.child != None:
+            ret += "\n" + self.child.__str__(indent+1)
+        
+        if self.sibling != None:
+            ret += "\n" + self.sibling.__str__(indent)
+            
+        return ret
+      
 class BinomialHeap():
     def __init__(self):
         self.head = None   
+        
+    def __str__(self):
+        return self.head.__str__()
             
     def insert(self,key):
         temp = BinomialHeap()
