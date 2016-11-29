@@ -100,8 +100,7 @@ class FibHeap:
 	def extractMin(self):
 
 		x = self.min #temp var for min
-		done = False
-		if x is not None and not done:
+		if x is not None:
 			if x.child is not None:
 				print("\n\niterating childlist")
 				#iterate child node list:
