@@ -18,11 +18,20 @@ class FibHeap:
 			self.mark = False
 
 	def __init__(self):
-
 		self.root = None
 		self.min = None
 		self.count = 0
 		#print("Creating new FibHeap...")
+
+	def makeHeap(self,list):
+		print("made fib heap")
+		if(self.checkAlph):
+			# assign each alpha key to a numeric one
+			# assigned in order of its place in the alphabet
+			list = [ord(x) % 32 for x in list]
+
+		[self.insertNode(x) for x in list]
+
 
 	def insertNode(self, data):
 		node = self.Node(data)
@@ -47,23 +56,34 @@ class FibHeap:
 			yield node
 			node = node.right
 
+	def search (self, element):
+		current=self.root
+		index=1
+		while current != None:
+		    if current.data == element:
+		        return index
+		    current = current.next_node
+		    index += 1
+		return -1
+
 
 	def isEmpty(self):
-		return root == None
+		return self.min == None
 
 	def emptyHeap(self):
-		min = None
-		count = 0
+		self.min = None
+		self.count = 0
 
 	def findMin(self):
-		return self.min
+		return self.min.data
 
 	def addToRoot(self, head, node):
 
-		if head is None:
-			node.left = node.right = node
+		if head is None: #if root list is empty
+			node.left = node.right = node 
 			return node
 		else:
+			#else connect the node to the head of the root list
 			node.left = head
 			node.right = head.right
 			head.right = node
@@ -82,22 +102,27 @@ class FibHeap:
 		x = self.min #temp var for min
 		if x is not None:
 			if x.child is not None:
-				#print("\n\niterating childlist")
+				print("\n\niterating childlist")
 				#iterate child node list:
 				child = [x for x in self.iterateList(x.child)]
 				for i in range(0, len(child)):
-					#print("Moving kids to root list...")
+					print(child[i].data)
+					print("Moving kids to root list...")
 					self.min = self.addToRoot(self.min, child[i]) #move children to root list
-					x.parent = None
+					child[i].parent = None
 			#print("removing min assigning as rando num")
-			self.min = self.removeNode(self.min, x)
+			self.min = self.removeNode(x, self.min)
 
 			if(x == x.right):
-				self.emptyHeap() #node is alone in heap... empty it
+				#item is last node
+				#return x.data
+				self.emptyHeap() #node is alone in heap... empty it 
 			else:
 				self.min = x.right # point to other node in root list
 				self.consolidate()
-		self.count -= 1 #decrease node count
+			self.count -= 1 #decrease node count
+		return x.data
+
 
 	def consolidate(self):
 
@@ -131,7 +156,7 @@ class FibHeap:
 
 
 	def makeChild(self, head, node):
-		self.min = self.removeNode(self.min, node)
+		self.min = self.removeNode(head,node)
 
 		node.parent = head
 		node.left = node.right = node
@@ -141,9 +166,13 @@ class FibHeap:
 		node.mark = False #set mark to false
 
 	def delete(self,node):
-		
+
 		self.decreaseKey(node,-math.inf)
 		self.extractMin()
+
+	# def printHeap(self, node):
+	# 	nodeList = [x for x in self.iterateList(self.root)]
+
 
 
 	def decreaseKey(self, key, newKey):
@@ -163,7 +192,8 @@ class FibHeap:
 			self.min = x
 
 	def cut(self, child, parent):
-		parent.child = removeNode(parent.child, child)
+
+		parent.child = removeNode(parent.child, child) 
 		parent.degree -= 1
 		self.min = self.addToRoot(self.min, child)
 
@@ -182,6 +212,7 @@ class FibHeap:
 				self.cascadingCut(x)
 
 	def mergeHeap(self, heap):
+
 		self.min = self.addToHeap(self.min, heap.min)
 
 		if((self.min is None) or (heap.min is not None and heap.min.data < self.min.data)):
@@ -203,3 +234,4 @@ class FibHeap:
 			node2.right = node1
 			node1.left = node2
 			return node1
+
