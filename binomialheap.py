@@ -199,7 +199,8 @@ class BinomialHeap():
 
         
     def find_minimum(self):
-    
+        '''Returns reference to the minimum node in the heap'''
+        
         y = None
         x = self.head 
         
@@ -209,7 +210,5 @@ class BinomialHeap():
             if x.value < m:
                 m = x.value
                 y = x
-   
-            x = x.sibling
-            
+            x = x.sibling   
         return y
