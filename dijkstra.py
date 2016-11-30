@@ -20,6 +20,7 @@ from graph import Graph
 from vertex import Vertex
 import heapq # example using heapq
 from fibHeapFinal import FibHeap
+from time import time
 
 
 '''
@@ -58,66 +59,91 @@ def shortest(v, path):
     return
 
 
-def dijkstra(aGraph, start):
+def dijkstra(aGraph, start, queue = "FibHeap"):
 
-	# Initialize new FibHeap
-	fib = FibHeap()
+	 
+	fheap = False
+	pyheap = False
+	biheap = False
+
+	if queue == "FibHeap":
+		print "Using Fiobonnaci Heap Structure...\n"
+		# Initialize new FibHeap
+		fib = FibHeap()
+		fheap = True
+	elif queue == "Heapq":
+		print "Using Heapq Data Structure From Python...\n"
+		pyheap = True
+	elif queue == "Binomial":
+		print "Using Binomial Heap Structure...\n"
+		biheap = True
+
+
+
 
 	# Set the distance for the start node to zero
 	start.set_distance(0)
 
 	# Put the tuple pair into the priority queue
 	unvisited_queue = [(v.get_distance,v) for v in aGraph]
-	for index, item in enumerate(unvisited_queue):
-		fib.insertNode(index) # index of v is how its stored in queue
 
-	heapq.heapify(unvisited_queue)
-	while not fib.isEmpty() and len(unvisited_queue):
-		#pop vertex with smallest distance
-		#uv = heapq.heappop(unvisited_queue)
-		uv = fib.extractMin() #get index of smallest element stored in tree
-		print uv
-		lala = unvisited_queue[uv]
-		print "uv is: " 
-		current = lala[1]
-		#current = uv[1]
-		print current
-		current.set_visited()
-		
+	if (fheap):
+		for index, item in enumerate(unvisited_queue):
+			fib.insertNode(index) # index of v is how its stored in queue
+		while(len(unvisited_queue) and not fib.isEmpty()):
+			min = fib.extractMin()
+			vert = unvisited_queue[min]
+			current = vert[1]
+			print current
+			current.set_visited() #set vertex to visited 
 
-		#for next in v.adj
-		for next in current.adjacent:
-			#if visited we dont care so skip
-			if next.visited:
-				print "adj node has been visited already"
-				continue
-			new_dist = current.get_distance() + current.get_weight(next)
+			# now visit adj nodes
+			for next in current.adjacent:
+				#if already visited just skip
+				if next.visited:
+					print "adj node already visited"
+					continue
+				new_dist = current.get_distance() + current.get_weight(next)
 
-			if new_dist < next.get_distance():
-				next.set_distance(new_dist)
-				next.set_previous(current)
-				print('updated current = %s next = %s new_dist = %s'
-					%(current.get_id(), next.get_id(), next.get_distance()))
-
-			else:
-				print('not updated: current = %s next = %s new_dist = %s'
-					%(current.get_id(), next.get_id(), next.get_distance()))
+				#check if new_dist is smaller
+				if new_dist < next.get_distance():
+					next.set_distance(new_dist)
+					next.set_previous(current)
 
 
-		# Rebuild heap
-		# 1. Pop every item
-		# for i in range(0,fib.count):
-		# 	print "Min is: %d" % fib.findMin()
-		# 	fib.extractMin()
-			#heapq.heappop(unvisited_queue)
-		# 2. Put all vertices not visited into the queue
-		#unvisited_queue = [(v.get_distance(),v) for v in aGraph if not v.visited]
-		# print "HJDHAKJD"
-		# print len(unvisited_queue)
+	if (pyheap):
 
-		# #heapq.heapify(unvisited_queue)
-		# for index, item in enumerate(unvisited_queue):
-		# 	fib.insertNode(index)
+		heapq.heapify(unvisited_queue) #add unvisted nodes to heap
+
+		while (len(unvisited_queue)):
+			#pop vertex with smallest distance
+			min = heapq.heappop(unvisited_queue)
+			current = min[1]
+			print current
+			current.set_visited()
+			
+			#for next in v.adj
+			for next in current.adjacent:
+				#if visited we dont care so skip
+				if next.visited:
+					print "adj node has been visited already"
+					continue
+				new_dist = current.get_distance() + current.get_weight(next)
+
+				if new_dist < next.get_distance():
+					next.set_distance(new_dist)
+					next.set_previous(current)
+
+
+			#Rebuild heap
+			#1. Pop every item
+			while len(unvisited_queue):
+				heapq.heappop(unvisited_queue)
+			
+			#2. Put all vertices not visited into the queue
+			unvisited_queue = [(v.get_distance(),v) for v in aGraph if not v.visited]
+
+			heapq.heapify(unvisited_queue)
 
 
 if __name__ == '__main__':
@@ -148,10 +174,12 @@ if __name__ == '__main__':
 			wid = w.get_id()
 			print ('( %s , %s, %3d)'  % ( vid, wid, v.get_weight(w)))
 
+	print "Starting time to calc shortest path in graph...\n"
+	t0 = time() #start
+	dijkstra(g, g.get_vertex('a'), "FibHeap") 
 
-	dijkstra(g, g.get_vertex('a')) 
-
-	target = g.get_vertex('f')
+	target = g.get_vertex('e')
 	path = [target.get_id()]
 	shortest(target, path)
 	print ('The shortest path : %s' %(path[::-1]))
+	print("done in %.5fs"%(time()-t0))
