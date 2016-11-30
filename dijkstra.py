@@ -109,6 +109,12 @@ def dijkstra(aGraph, start, queue = "FibHeap"):
 				if new_dist < next.get_distance():
 					next.set_distance(new_dist)
 					next.set_previous(current)
+			# rebuild heap
+			# while not fib.isEmpty():
+			# 	fib.extractMin()
+			# unvisited_queue = [(v.get_distance, v) for v in aGraph if not v.visited]
+			# for index, item in enumerate(unvisited_queue):
+			# 	fib.insertNode(index)
 
 
 	if (pyheap):
@@ -176,9 +182,9 @@ if __name__ == '__main__':
 
 	print "Starting time to calc shortest path in graph...\n"
 	t0 = time() #start
-	dijkstra(g, g.get_vertex('a'), "FibHeap") 
+	dijkstra(g, g.get_vertex('a'), "Heapq") 
 
-	target = g.get_vertex('e')
+	target = g.get_vertex('f')
 	path = [target.get_id()]
 	shortest(target, path)
 	print ('The shortest path : %s' %(path[::-1]))
