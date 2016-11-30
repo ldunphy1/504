@@ -18,7 +18,7 @@ queue data structures
 import sys
 from graph import Graph
 from vertex import Vertex
-import heapq # example using heapq
+import heapq 
 from fibHeapFinal import FibHeap
 from time import time
 
@@ -55,6 +55,8 @@ def shortest(v, path):
     ''' make shortest path from v.previous'''
     if v.previous:
         path.append(v.previous.get_id())
+        print "The path is now: " 
+        print path
         shortest(v.previous, path)
     return
 
@@ -77,8 +79,6 @@ def dijkstra(aGraph, start, queue = "FibHeap"):
 	elif queue == "Binomial":
 		print "Using Binomial Heap Structure...\n"
 		biheap = True
-
-
 
 
 	# Set the distance for the start node to zero
@@ -110,12 +110,10 @@ def dijkstra(aGraph, start, queue = "FibHeap"):
 					next.set_distance(new_dist)
 					next.set_previous(current)
 			# rebuild heap
-			# while not fib.isEmpty():
-			# 	fib.extractMin()
-			# unvisited_queue = [(v.get_distance, v) for v in aGraph if not v.visited]
-			# for index, item in enumerate(unvisited_queue):
-			# 	fib.insertNode(index)
-
+			fib.emptyHeap()
+			unvisited_queue = [(v.get_distance, v) for v in aGraph if not v.visited]
+			for index, item in enumerate(unvisited_queue):
+				fib.insertNode(index)
 
 	if (pyheap):
 
@@ -139,6 +137,8 @@ def dijkstra(aGraph, start, queue = "FibHeap"):
 				if new_dist < next.get_distance():
 					next.set_distance(new_dist)
 					next.set_previous(current)
+					print 'updated : current = %s next = %s new_dist = %s' % (current.get_id(), next.get_id(), next.get_distance())
+
 
 
 			#Rebuild heap
@@ -172,6 +172,9 @@ if __name__ == '__main__':
 	g.add_edge('c', 'f', 2)
 	g.add_edge('d', 'e', 6)
 	g.add_edge('e', 'f', 9)
+	g.add_edge('e', 'g', 18)
+	g.add_edge('c','e', 5)
+	g.add_edge('f','g', 4)
 
 	print ("Graph data:")
 	for v in g:
@@ -182,9 +185,9 @@ if __name__ == '__main__':
 
 	print "Starting time to calc shortest path in graph...\n"
 	t0 = time() #start
-	dijkstra(g, g.get_vertex('a'), "Heapq") 
+	dijkstra(g, g.get_vertex('a'), "FibHeap") 
 
-	target = g.get_vertex('f')
+	target = g.get_vertex('g')
 	path = [target.get_id()]
 	shortest(target, path)
 	print ('The shortest path : %s' %(path[::-1]))
