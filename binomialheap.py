@@ -4,49 +4,76 @@ Created on Mon Nov  7 15:31:18 2016
 
 @author: montgomt
 """
-
-
-        
-class node():
-    def __init__(self,value = None):
-        self.value = value
-        self.degree = 0
-        self.parent = None
-        self.child = None
-        self.sibling = None
-        
-        
-    def __str__(self,indent=0):
-        '''Basic printout for nodes in tree. Level of indentation = depth in tree.
-        For each new line, +1 indentation indicates a child node.  -1 indentation
-        indicates moving to a different branch in a tree.  0 indentation indicates
-        a root node and thus any +indentation will be part of that root's tree
-        until the next root node occurs.'''
-        
-        ret = "  "*indent+str(self.value)
-        
-        if self.child != None:
-            ret += "\n" + self.child.__str__(indent+1)
-        
-        if self.sibling != None:
-            ret += "\n" + self.sibling.__str__(indent)
-            
-        return ret
       
 class BinomialHeap():
+
+    # this needs to be an inner class bc scope reasons
+    class node():
+        def __init__(self,value, key):  # key is vertex, value is weight
+            self.value = value
+            self.key = key
+            self.degree = 0
+            self.parent = None
+            self.child = None
+            self.sibling = None
+            
+            
+        def __str__(self,indent=0):
+            '''Basic printout for nodes in tree. Level of indentation = depth in tree.
+            For each new line, +1 indentation indicates a child node.  -1 indentation
+            indicates moving to a different branch in a tree.  0 indentation indicates
+            a root node and thus any +indentation will be part of that root's tree
+            until the next root node occurs.'''
+            
+            ret = "  "*indent+str(self.value)
+            
+            if self.child != None:
+                ret += "\n" + self.child.__str__(indent+1)
+            
+            if self.sibling != None:
+                ret += "\n" + self.sibling.__str__(indent)
+                
+            return ret
+
     def __init__(self):
-        self.head = None   
+        self.head = None 
+        self.count = 0  
         
     def __str__(self):
         return self.head.__str__()
             
-    def insert(self,key):
+    def insertNode(self,value, key): #so the value will be the weight and the key is the vertex
         temp = BinomialHeap()
-        n = node(key)
+        n = self.node(value, key)
+        print n.value
         temp.head = n
         self.union(temp)
+        self.count +=1 #increase node count
 
-    def extract_min(self):
+    def emptyHeap(self):
+        #need this to clear heap in dijkstra
+        self.head = None
+        self.count = 0
+
+    def isEmpty(self):
+        #boolean method to check if heap empty
+        return self.head == None
+
+
+    #easier to iterate a node list this way
+    def iterateList(self, head):
+        node = stop = head
+        flag = False
+        while True:
+            if node == stop and flag is True:
+                break
+            elif node == stop:
+                flag = True
+            yield node
+            node = node.right
+
+    def extractMin(self): #changed name to match fib heap name convention
+        n = self.head #store temp min node
         n = self.head
         minkey = n.value
         minnode = n
@@ -89,7 +116,7 @@ class BinomialHeap():
         self.union(h)
         
         '''return extracted value'''
-        return minkey
+        return minkey, minnode.key
         
     def decrease_key(self,n,value):
         if n.value < value:
@@ -109,7 +136,7 @@ class BinomialHeap():
             
     def delete(self,n):
         self.decrease_key(n,float('-inf'))
-        self.extract_min()
+        self.extractMin()
 
 
     def link(self,y,z):
@@ -174,6 +201,8 @@ class BinomialHeap():
         x = H.head
         after = x.sibling
 
+        self.count += H2.count
+
         
         while after != None:
             if (x.degree != after.degree) or (after.sibling != None and after.sibling.degree == x.degree):
@@ -198,7 +227,7 @@ class BinomialHeap():
 
 
         
-    def find_minimum(self):
+    def findMin(self):
         '''Returns reference to the minimum node in the heap'''
         
         y = None

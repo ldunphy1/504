@@ -20,7 +20,9 @@ from graph import Graph
 from vertex import Vertex
 import heapq 
 from fibHeapFinal import FibHeap
+from binomialheap import BinomialHeap
 from time import time
+import random
 
 
 '''
@@ -63,37 +65,35 @@ def shortest(v, path):
 
 def dijkstra(aGraph, start, queue = "FibHeap"):
 
-	 
-	fheap = False
-	pyheap = False
-	biheap = False
-
-	if queue == "FibHeap":
-		print "Using Fiobonnaci Heap Structure...\n"
-		# Initialize new FibHeap
-		fib = FibHeap()
-		fheap = True
-	elif queue == "Heapq":
-		print "Using Heapq Data Structure From Python...\n"
-		pyheap = True
-	elif queue == "Binomial":
-		print "Using Binomial Heap Structure...\n"
-		biheap = True
-
 
 	# Set the distance for the start node to zero
 	start.set_distance(0)
 
 	# Put the tuple pair into the priority queue
 	unvisited_queue = [(v.get_distance,v) for v in aGraph]
+	pyheap = False #building and rebuilding this queue is different can eventually just change background code
 
-	if (fheap):
+	if queue == "FibHeap":
+		print "Using Fiobonnaci Heap Structure...\n"
+		# Initialize new FibHeap
+		obj = FibHeap()
+	elif queue == "Heapq":
+		print "Using Heapq Data Structure From Python...\n"
+		pyheap = True
+	elif queue == "Binomial":
+		print "Using Binomial Heap Structure...\n"
+		obj = BinomialHeap()
+
+	if not pyheap:
 		for index, item in enumerate(unvisited_queue):
-			fib.insertNode(index) # index of v is how its stored in queue
-		while(len(unvisited_queue) and not fib.isEmpty()):
-			min = fib.extractMin()
-			vert = unvisited_queue[min]
-			current = vert[1]
+			obj.insertNode(item[1].get_distance(), item)
+			for next in item[1].adjacent:
+				obj.insertNode(item[1].get_weight(next) + item[1].get_distance(), next) #store in tree based on weights
+		
+		while(len(unvisited_queue)):
+			min, key = obj.extractMin()
+			print key
+			current = key[1]
 			print current
 			current.set_visited() #set vertex to visited 
 
@@ -109,11 +109,14 @@ def dijkstra(aGraph, start, queue = "FibHeap"):
 				if new_dist < next.get_distance():
 					next.set_distance(new_dist)
 					next.set_previous(current)
+					print 'updated : current = %s next = %s new_dist = %s' % (current.get_id(), next.get_id(), next.get_distance())
 			# rebuild heap
-			fib.emptyHeap()
+			obj.emptyHeap()
 			unvisited_queue = [(v.get_distance, v) for v in aGraph if not v.visited]
 			for index, item in enumerate(unvisited_queue):
-				fib.insertNode(index)
+				obj.insertNode(item[1].get_distance(), item)
+				for next in item[1].adjacent:
+					 obj.insertNode(item[1].get_weight(next) + item[1].get_distance(), next) #store in tree based on weights
 
 	if (pyheap):
 
@@ -121,6 +124,8 @@ def dijkstra(aGraph, start, queue = "FibHeap"):
 
 		while (len(unvisited_queue)):
 			#pop vertex with smallest distance
+			for index, item in enumerate(unvisited_queue):
+				print index, item[1].get_distance()
 			min = heapq.heappop(unvisited_queue)
 			current = min[1]
 			print current
@@ -138,7 +143,6 @@ def dijkstra(aGraph, start, queue = "FibHeap"):
 					next.set_distance(new_dist)
 					next.set_previous(current)
 					print 'updated : current = %s next = %s new_dist = %s' % (current.get_id(), next.get_id(), next.get_distance())
-
 
 
 			#Rebuild heap
@@ -185,7 +189,7 @@ if __name__ == '__main__':
 
 	print "Starting time to calc shortest path in graph...\n"
 	t0 = time() #start
-	dijkstra(g, g.get_vertex('a'), "FibHeap") 
+	dijkstra(g, g.get_vertex('a'), "Binomial") 
 
 	target = g.get_vertex('g')
 	path = [target.get_id()]

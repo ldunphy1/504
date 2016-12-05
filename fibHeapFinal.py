@@ -10,31 +10,22 @@ class FibHeap:
 
 	class Node:
 
-		def __init__(self, data):
+		def __init__(self, data, key):
 			self.data = data
+			self.key = key
 			self.parent = self.child = None
 			self.left = self.right = None
 			self.degree = 0
 			self.mark = False
 
 	def __init__(self):
-		self.root = None
+		self.root = None # i think my bug has something to do with not having a point to a root bc i did this the java way
 		self.min = None
 		self.count = 0
-		#print("Creating new FibHeap...")
-
-	def makeHeap(self,list):
-		print("made fib heap")
-		if(self.checkAlph):
-			# assign each alpha key to a numeric one
-			# assigned in order of its place in the alphabet
-			list = [ord(x) % 32 for x in list]
-
-		[self.insertNode(x) for x in list]
 
 
-	def insertNode(self, data):
-		node = self.Node(data)
+	def insertNode(self, data, key):
+		node = self.Node(data, key)
 		node.left = node.right = node
 		self.min = self.addToRoot(self.min, node)
 		print(node.data)
@@ -44,6 +35,11 @@ class FibHeap:
 
 		self.count += 1
 
+	def getValue(self, node):
+		return node.data
+
+	def getKey(self, node):
+		return node.key
 
 	def iterateList(self, head):
 		node = stop = head
@@ -75,7 +71,7 @@ class FibHeap:
 		self.count = 0
 
 	def findMin(self):
-		return self.min.data
+		return self.min.data, self.min.key
 
 	def addToRoot(self, head, node):
 
@@ -111,17 +107,20 @@ class FibHeap:
 					self.min = self.addToRoot(self.min, child[i]) #move children to root list
 					child[i].parent = None
 			#print("removing min assigning as rando num")
-			self.min = self.removeNode(x, self.min)
 
 			if(x == x.right):
+				self.count -= 1 
+				self.min = self.removeNode(x, self.min)
+				return x.data, x.key
 				#item is last node
 				#return x.data
-				self.emptyHeap() #node is alone in heap... empty it 
+				#self.emptyHeap() #node is alone in heap... empty it 
 			else:
+				self.min = self.removeNode(x, self.min)
 				self.min = x.right # point to other node in root list
 				self.consolidate()
-			self.count -= 1 #decrease node count
-		return x.data
+				self.count -= 1 #decrease node count
+				return x.data, x.key
 
 
 	def consolidate(self):

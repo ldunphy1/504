@@ -6,6 +6,7 @@ implementation
 """
 
 from fibHeapFinal import FibHeap
+from binomialheap import BinomialHeap
 import random
 import unittest
 
@@ -55,11 +56,11 @@ if __name__ == '__main__':
 	#unittest.main()
 
 	print("running tests on FibHeap...")
-	heap = FibHeap()
+	heap = BinomialHeap()
 	print("\nFirst Heap is: \n")
-	heap.insertNode(0) #known minimum for testing
+	heap.insertNode(0, 77) #known minimum for testing
 	for i in range(2, 7):
-		heap.insertNode(random.randint(1, 200)*i)
+		heap.insertNode(random.randint(1, 200)*i, i)
 	# min = heap.findMin().data
 	# print("The minimum is: %d" % min)
 	# heap.extractMin()
@@ -68,21 +69,4 @@ if __name__ == '__main__':
 	for i in range(0, heap.count):
 		print("Min is: \n")  
 		print(heap.findMin())
-		heap.extractMin()
-		
-	print("\n\nSecond Heap is: \n")
-	heap2 = FibHeap()
-	heap2.insertNode(-10) #known minimum for testing
-	for i in range(2,33):
-		heap2.insertNode(random.randint(1, 200)*i)
-	print("Heap 2 Min is: ")
-	heap.mergeHeap(heap2)
-	print("\nMerged two heaps together")
-	# print("New Heap is: \n")
-	# heap3 = [x for x in heap.iterateList(heap.min)]
-	# for i in range(len(heap3)):
-	# 	print(heap3[i].data)
-	print("\nAfter merge min is: %d" % heap.findMin())
-	heap.extractMin()
-	print("\nExtracted min and new min is: %d" % heap.findMin())
-
+		heap.extractMin()		

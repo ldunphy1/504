@@ -1,7 +1,7 @@
 '''
 Vertex Class:
 
-Used to make connections in graph 
+Represents each vertex in the Graph 
 
 '''
 
