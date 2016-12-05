@@ -23,7 +23,7 @@ class node():
         a root node and thus any +indentation will be part of that root's tree
         until the next root node occurs.'''
         
-        ret = "  "*level+str(self.value)
+        ret = "  "*indent+str(self.value)
         
         if self.child != None:
             ret += "\n" + self.child.__str__(indent+1)
@@ -198,8 +198,17 @@ class BinomialHeap():
 
 
         
-def minimum(self,H):
-    
-    y = None
-    
-    pass
+    def find_minimum(self):
+        '''Returns reference to the minimum node in the heap'''
+        
+        y = None
+        x = self.head 
+        
+        m = float('inf')
+        
+        while x != None:
+            if x.value < m:
+                m = x.value
+                y = x
+            x = x.sibling   
+        return y
