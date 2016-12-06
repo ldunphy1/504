@@ -6,7 +6,6 @@ Binomial Heap based on pseudocode found in Ch. 19 of CLRS 'Intro. to Algorithms'
       
 class BinomialHeap():
 
-    # this needs to be an inner class bc scope reasons
     class node():
         def __init__(self,value, key):  # key is vertex, value is weight
             self.value = value
@@ -41,7 +40,7 @@ class BinomialHeap():
     def __str__(self):
         return self.head.__str__()
             
-    def insertNode(self,value, key): #so the value will be the weight and the key is the vertex
+    def insertNode(self,value, key): #value will be the weight and the key is the vertex
         temp = BinomialHeap()
         n = self.node(value, key)
         temp.head = n
@@ -103,7 +102,7 @@ class BinomialHeap():
             else:
                minprev.sibling = minnode.sibling
             
-            '''unify original root list (minus minimum) with min node's child list''' 
+            '''unify original root list (minus minimum) w/ min node's child list''' 
             self.union(tempheap)
             
         else:
@@ -111,7 +110,7 @@ class BinomialHeap():
             self.head = self.head.sibling
             
  
-        return minkey
+        return minkey, minnode.key
                 
         
     def decrease_key(self,n,value):
