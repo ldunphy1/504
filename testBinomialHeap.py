@@ -27,8 +27,9 @@ class BinomialTest(unittest.TestCase):
     def test_extractMin(self):
         '''test extract min'''
         expectedmin = 1
-        for _ in range(1,10): #delete values 1-9 from heap
-            self.assertEqual(self.H.extractMin(),expectedmin)
+        for _ in range(self.H.count):
+            #empty the heap to completion
+            self.assertEqual(self.H.extractMin()[0],expectedmin)
             expectedmin += 1
             
     def test_delete(self):
