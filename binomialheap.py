@@ -1,9 +1,7 @@
 
 # -*- coding: utf-8 -*-
 """
-Created on Mon Nov  7 15:31:18 2016
-@author: montgomt
-
+Binomial Heap based on pseudocode found in Ch. 19 of CLRS 'Intro. to Algorithms' (2001) 
 """
       
 class BinomialHeap():
@@ -46,7 +44,6 @@ class BinomialHeap():
     def insertNode(self,value, key): #so the value will be the weight and the key is the vertex
         temp = BinomialHeap()
         n = self.node(value, key)
-        print n.value
         temp.head = n
         self.union(temp)
         self.count +=1 #increase node count
@@ -60,52 +57,62 @@ class BinomialHeap():
         #boolean method to check if heap empty
         return self.head == None
 
-
-    def extractMin(self): #changed name to match fib heap name convention
-        n = self.head #store temp min node
-        n = self.head
-        minkey = n.value
-        minnode = n
+    def extractMin(self):
+        iternode = self.head 
+        minkey = iternode.value
+        minnode = iternode #will store ref to minimum node 
+        minprev = None #ref to upstream node from min node
         
         '''find minimum node in root list'''
-        while n.sibling != None:
-            nextnode = n.sibling
+        while iternode.sibling != None:
+            nextnode = iternode.sibling           
             nextkey = nextnode.value
             if nextkey < minkey:
                 minkey = nextkey
                 minnode = nextnode
-            n = nextnode
+                minprev = iternode
+            iternode = nextnode
         
-        '''reverse minimum node's children'''
-        h = BinomialHeap()
-        n = minnode.child
-        n.parent = None
         
-        prev = None
-        current = n
-        nxt = n.sibling
-        current.parent = None
+        current = minnode.child
+        tempheap = BinomialHeap()
         
-        while nxt != None:
+        
+        if current != None:
+            '''if minimum node has children, reverse order of their linked list'''
+            
+            prev = None
+            nxt = current.sibling
+            current.parent = None
+
+            while nxt != None:
+                current.sibling = prev
+                prev = current  
+                current = nxt 
+                nxt = current.sibling 
+                
             current.sibling = prev
             current.parent = None
             
-            prev = current  
-            current = nxt 
-            nxt = current.sibling 
+            '''set former last child as head of temp heap'''    
+            tempheap.head = current
+                        
+            '''remove minimum node, reassign head if needed'''
+            if self.head == minnode:
+                self.head = self.head.sibling
+            else:
+               minprev.sibling = minnode.sibling
             
-        current.sibling = prev
-        current.parent = None
+            '''unify original root list (minus minimum) with min node's child list''' 
+            self.union(tempheap)
             
-        '''set last child as head of temp heap'''    
-        h.head = current
-        
-        '''remove minimum from root list'''
-        self.head = minnode.sibling
-        self.union(h)
-        
-        '''return extracted value'''
-        return minkey, minnode.key
+        else:
+            '''no children, existing BinomialHeap valid. Remove w/o rebalancing'''
+            self.head = self.head.sibling
+            
+ 
+        return minkey
+                
         
     def decrease_key(self,n,value):
         if n.value < value:
@@ -143,8 +150,9 @@ class BinomialHeap():
         a = self.head
         b = H2.head
     
-        '''choose head of combined rootlist to be smaller of the two list heads'''
+       
         if b.degree < a.degree:
+            '''choose head of combined rootlist to be smaller of the two list heads'''
             self.head = b
         
         if self.head == b:
@@ -153,8 +161,9 @@ class BinomialHeap():
             
         a = self.head
         
-        '''iterate over root list until none remain'''
+        
         while b != None:
+            '''iterate over root list until none remain'''
             
             if a.sibling == None:
                 '''first list only has head, simply append it to second list'''
@@ -162,20 +171,18 @@ class BinomialHeap():
                 return self.head
                 
             elif a.sibling.degree < b.degree:
-                '''a's sibling is smaller degree than other choice. Make sibling 
-                next root to compare to b'''
+                '''a's sibling smaller degree than other. Compare a.sibling to b next'''
                 a = a.sibling
 
             else:
-                '''b is smaller or the same degree as a. Make b's sibling next 
+                '''b smaller/ or the same degree as a. Make b.sibling next 
                 comparison, and put b next to a in combined rootlist'''
                 c = b.sibling
                 b.sibling = a.sibling
                 a.sibling = b
                 a = a.sibling
                 b = c
-
-                
+       
         del H2
         return self.head
         
@@ -213,8 +220,6 @@ class BinomialHeap():
                     x = after
                                   
             after = x.sibling
-
-
         
     def findMin(self):
         '''Returns reference to the minimum node in the heap'''
