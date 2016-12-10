@@ -17,10 +17,10 @@ E50_c = create_edgelist(A50_c);
 E100_c = create_edgelist(A100_c);
 E200_c = create_edgelist(A200_c);
 
-dlmwrite('E25_c.txt',E25_c);
-dlmwrite('E50_c.txt',E50_c);
-dlmwrite('E100_c.txt',E100_c);
-dlmwrite('E200_c.txt',E200_c);
+csvwrite('E25_c.csv',E25_c);
+csvwrite('E50_c.csv',E50_c);
+csvwrite('E100_c.csv',E100_c);
+csvwrite('E200_c.csv',E200_c);
 
 end
 
