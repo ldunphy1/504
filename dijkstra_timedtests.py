@@ -12,10 +12,9 @@ from time import time
 import dijkstrapy3
 reload(dijkstrapy3)
 
-
-'''create graph from file'''
 def graph_from_file(filename,num_nodes):
-
+    '''reads edgelist from file and creates a graph object'''
+    
     g = Graph()
     for i in range(1,num_nodes+1):
         g.add_vertex(str(i))
@@ -27,6 +26,8 @@ def graph_from_file(filename,num_nodes):
     return g
         
 def single_timed_test(g,u,v,structure):
+    '''runs a single instance of the Dijkstra algorithm on a graph g with starting 
+    node u and ending node v.  structure refers to the type data structure used'''
     
     t0 = time()
     dijkstrapy3.dijkstra(g,g.get_vertex(u),structure)
@@ -45,6 +46,7 @@ def repeat_timed_test(G,u,v,numtests):
     
     results = [[None,None,None] for i in range(numtests)]
     for i in range(numtests):
+        print(' Running Test #',i)
         bin_duration = single_timed_test(G[i],str(u),str(v),'Binomial')
         fib_duration = single_timed_test(G[i],str(u),str(v),'FibHeap')
         minh_duration = single_timed_test(G[i],str(u),str(v),'Heapq')
@@ -53,48 +55,48 @@ def repeat_timed_test(G,u,v,numtests):
 
     return results
     
-    
-'''run the tests when file is executed'''
+'''------------run the tests when file is executed--------------'''
 if __name__ == '__main__':
 
-    numtests = 20
-    '''repeated tests of 25 node, 10% density graphs-- testing 20 graphs'''
+    numtests = 5
+    '''graph containers'''
+    g100_10 = [None]*numtests
+    g200_10 = [None]*numtests
+    g300_10 = [None]*numtests
+    g400_10 = [None]*numtests
+    g500_10 = [None]*numtests
     
-    '''build graphs from edgelists'''
-    g25_10 = [None]*numtests
-    g50_10 = [None]*numtests
-    g75_10 = [None]*numtests
-    
+    '''build graphs for each test of each graph size'''
     for i in range(numtests):
-        filename25 = 'E25_10_' +str(i+1) +'.csv'
-        filename50 = 'E50_10_' +str(i+1) +'.csv'
-        filename75 = 'E75_10_' +str(i+1) +'.csv'
-        g25_10[i] = graph_from_file(filename25,25)
-        g50_10[i] = graph_from_file(filename50,50)
-        g75_10[i] = graph_from_file(filename75,75)
-
-    
-    '''time dijkstra for different structures and numbers of nodes'''
-    results25_10 = repeat_timed_test(g25_10,1,25,numtests)
-    results50_10 = repeat_timed_test(g50_10,1,50,numtests)
-    results75_10 = repeat_timed_test(g75_10,1,75,numtests)
-    
-    with open('results25_10.csv','wb') as f25:
-        csv25 = csv.writer(f25)
-        for i in range(numtests):
-            csv25.writerow(results25_10[i])
-    
-    with open('results50_10.csv','wb') as f50:
-        csv50 = csv.writer(f50)
-        for i in range(numtests):
-            csv50.writerow(results50_10[i])
-            
-    with open('results75_10.csv','wb') as f75:
-        csv75 = csv.writer(f75)
-        for i in range(numtests):
-            csv75.writerow(results75_10[i])
-            
-    for row in results25_10:
-        print(row)
- 
+        filename100 = 'E100_10_' +str(i+1) +'.csv'
+        filename200 = 'E200_10_' +str(i+1) +'.csv'
+        filename300 = 'E300_10_' +str(i+1) +'.csv'
+        filename400 = 'E400_10_' +str(i+1) +'.csv'
+        filename500 = 'E500_10_' +str(i+1) +'.csv'
+        
+        g100_10[i] = graph_from_file(filename100,100)
+        g200_10[i] = graph_from_file(filename200,200)
+        g300_10[i] = graph_from_file(filename300,300)
+        g400_10[i] = graph_from_file(filename400,400)
+        g500_10[i] = graph_from_file(filename500,500)
+        
+    r100to500 = [None]*5
+    print('Running Dijkstra tests for 100 nodes...')
+    r100to500[0] = repeat_timed_test(g100_10,1,100,numtests)
+    print('Running Dijkstra tests for 200 nodes...')
+    r100to500[1] = repeat_timed_test(g200_10,1,200,numtests)
+    print('Running Dijkstra tests for 300 nodes...')
+    r100to500[2]= repeat_timed_test(g300_10,1,300,numtests)
+    print('Running Dijkstra tests for 400 nodes...')
+    r100to500[3] = repeat_timed_test(g400_10,1,400,numtests)
+    print('Running Dijkstra tests for 500 nodes...')
+    r100to500[4] = repeat_timed_test(g500_10,1,500,numtests)
+   
+    for n in range(100,600,100):
+        filename = 'results' +str(n)+'_10.csv'
+        with open(filename,'wb') as f:
+            writer = csv.writer(f)
+            for i in range(numtests):
+                writer.writerow(r100to500[int(n/100)-1][i])
+       
     
