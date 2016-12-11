@@ -6,22 +6,29 @@ whereas CLRS starts from 1, leading to minor differences in the code here.
 
 import math as m
 
-class minheap:
+class MinHeap:
         
     def __init__(self,A = []):
         self.A =  A
-        self.__build_heap(self.A)
         self.heapsize = len(A)
-        self.minimum = self.A[0]
+        if self.A:  
+            self.__build_heap(self.A)
+            self.minimum = self.A[0]
+        else:
+            self.minimum = None
+                
+        
+    def __str__(self):
+        return str(self.A)
         
     def __build_heap(self,A):
-        for i in range(m.floor((len(A)-1)/2),-1,-1):  
+        for i in range(int(m.floor((len(A)-1)/2)),-1,-1):  
             self.__min_heapify(A,i)
             
     def __min_heapify(self,A,i):
         l = self.left(i)
-        r = self.right(i)   
-               
+        r = self.right(i)
+        
         if l<= len(A)-1 and A[l] < A[i]:
             smallest = l
         else:
@@ -37,7 +44,7 @@ class minheap:
             A[smallest] = temp
             self.__min_heapify(A,smallest)
     
-    def min_heapify(self):
+    def minHeapify(self):
         '''public method to heapify the entire tree'''
         self.__min_heapify(self.A,0)
 
@@ -59,7 +66,7 @@ class minheap:
             A[self.parent(i)] = temp
             i = self.parent(i)
             
-    def extract_min(self):
+    def extractMin(self):
         bh = self
         A = bh.A
         if bh.heapsize <1:
