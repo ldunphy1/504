@@ -14,14 +14,17 @@ class MinHeapTest(unittest.TestCase):
     def setUp(self):
         vals = list(range(1,11))
         random.shuffle(vals)
-        self.H = MinHeap(vals)
+        self.H = MinHeap()
+        '''insert random values into structure'''
+        for i in vals:
+            self.H.insertNode(i,str(i))  
     
     def test_extractMin(self):
         '''test extract min'''
         expectedmin = 1
-        for _ in range(self.H.heapsize):
+        for _ in range(self.H.count):
             #empty the heap to completion
-            self.assertEqual(self.H.extractMin(),expectedmin)
+            self.assertEqual(self.H.extractMin().value,expectedmin)
             expectedmin += 1
         
    

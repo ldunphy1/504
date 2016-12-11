@@ -13,8 +13,7 @@ queue data structures
 # Add dependency files and modules
 from imp import reload
 from graph import Graph
-from vertex import Vertex
-import heapq 
+import heapq
 from fibHeapFinal import FibHeap
 from binomialheap import BinomialHeap
 from time import time
@@ -66,8 +65,9 @@ def dijkstra(aGraph, start, queue = "FibHeap"):
 	unvisited_queue = [(v.get_distance,v) for v in aGraph]
 	pyheap = False #building and rebuilding this queue is different can eventually just change background code
 	minheap = False
+ 
 	if queue == "FibHeap":
-		#print("Using Fiobonnaci Heap Structure...\n")
+		print("Using Fiobonnaci Heap Structure...\n")
 		# Initialize new FibHeap
 		obj = FibHeap()
 	elif queue == "Heapq":
@@ -115,18 +115,22 @@ def dijkstra(aGraph, start, queue = "FibHeap"):
 					 obj.insertNode(item[1].get_weight(next) + item[1].get_distance(), next) #store in tree based on weights
 
 	if (minheap):
-             
-             obj = MinHeap(unvisited_queue)
-             
-             while (len(unvisited_queue)):
+             obj = MinHeap()
+             for index, item in enumerate(unvisited_queue):
+                 obj.insertNode(item[1].get_distance(), item)
+                 for next in item[1].adjacent:
+                     obj.insertNode(item[1].get_weight(next) + item[1].get_distance(), next) #store in tree based on weights
+             obj.minHeapify()
+
+             while (len(unvisited_queue)):               
                  #pop vertex with smallest distance
                  min = obj.extractMin()
-                 current = min[1]
+                 min = min.key #This should be a reference to a (distance,vertex) tuple
+                 current = min[1] 
                  current.set_visited()
                  
                  #for next in v.adj
                  for next in current.adjacent:
-                     
                      #if visited we dont care so skip
                      if next.visited:
                          #print( "adj node has been visited already")
@@ -138,15 +142,23 @@ def dijkstra(aGraph, start, queue = "FibHeap"):
                          next.set_distance(new_dist)
                          next.set_previous(current)
                          #print( 'updated : current = %s next = %s new_dist = %s' % (current.get_id(),
-                         
+                     
                  #Rebuild heap
                  #1. Pop every item
                  while len(obj.A):
                      obj.extractMin()
+                     
                  #2. Put all vertices not visited into the queue    
                  unvisited_queue = [(v.get_distance(),v) for v in aGraph if not v.visited]
-                 obj = MinHeap(unvisited_queue)
-
+                 
+                 for index, item in enumerate(unvisited_queue):
+                     obj.insertNode(item[1].get_distance(), item)
+                     for next in item[1].adjacent:
+                         obj.insertNode(item[1].get_weight(next) + item[1].get_distance(), next) #store in tree based on weights
+                 obj.minHeapify()
+                
+                
+                
 	if (pyheap):
 		heapq.heapify(unvisited_queue) #add unvisted nodes to heap
 
@@ -194,6 +206,7 @@ if __name__ == '__main__':
 	g.add_vertex('d')
 	g.add_vertex('e')
 	g.add_vertex('f')
+	g.add_vertex('g') 
 
 	g.add_edge('a', 'b', 7)  
 	g.add_edge('a', 'c', 9)
