@@ -1,4 +1,4 @@
-function [] = edgelist_creation(num_graphs,num_nodes,density)
+function [E] = edgelist_creation(num_graphs,num_nodes,density)
 %quick function to create random weighted edgelists for testing
 %saves to csv file for reading into python program
 
@@ -19,11 +19,11 @@ function [] = edgelist_creation(num_graphs,num_nodes,density)
         A = create_adjacency(num_nodes,150,density);
         E{i} = create_edgelist(A);
     end
-
+    
+    %save Edgelists to csv text file
     for i = 1:num_graphs
         filename = strcat('E',num2str(num_nodes),'_',num2str(density),'_',num2str(i),'.csv');
-        csvwrite(filename,E{i})
-        
+        csvwrite(filename,E{i}) 
     end
 end
 
@@ -37,8 +37,6 @@ end
 function [E] = create_edgelist(A)
 %Takes adjacency matrix A as input, returns 3 column vector of edges
 %E = [start,end, weight]
-
     [u,v,w] = find(A);
     E = [u,v,w];
-
 end

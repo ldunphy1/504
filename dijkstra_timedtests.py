@@ -11,6 +11,7 @@ from graph import Graph
 from time import time
 import dijkstra
 reload(dijkstra)
+import os
 
 def graph_from_file(filename,num_nodes):
     '''reads edgelist from file and creates a graph object'''
@@ -58,51 +59,90 @@ def repeat_timed_test(G,u,v,numtests):
 '''------------run the tests when file is executed--------------'''
 if __name__ == '__main__':
 
-    '''Testing by graph size in number of nodes'''
+    '''Testing by graph size in number of nodes and by density
+    There are 'numtests' versions of each graph for each size/density'''
     
-    numtests = 1
+    numtests = 5
+    
     '''graph containers'''
     g100_10 = [None]*numtests
     g200_10 = [None]*numtests
-#    g300_10 = [None]*numtests
-#    g400_10 = [None]*numtests
-#    g500_10 = [None]*numtests
+    g300_10 = [None]*numtests
+    g400_10 = [None]*numtests
+    g500_10 = [None]*numtests
     
-    '''build graphs for each test of each graph size'''
+    g100_75 = [None]*numtests
+    g200_75 = [None]*numtests
+    g300_75 = [None]*numtests
+    g400_75 = [None]*numtests
+    g500_75 = [None]*numtests
+    
+    '''build graphs for each test of each graph size and density'''
+    script_dir = os.path.dirname("__file__")
     for i in range(numtests):
-        filename100 = 'E100_10_' +str(i+1) +'.csv'
-        filename200 = 'E200_10_' +str(i+1) +'.csv'
-#        filename300 = 'E300_10_' +str(i+1) +'.csv'
-#        filename400 = 'E400_10_' +str(i+1) +'.csv'
-#        filename500 = 'E500_10_' +str(i+1) +'.csv'
+        filename100_10 = os.path.join(script_dir,'Edgelists/E100_10_' +str(i+1) +'.csv')
+        filename200_10 = os.path.join(script_dir,'Edgelists/E200_10_' +str(i+1) +'.csv')
+        filename300_10 = os.path.join(script_dir,'Edgelists/E300_10_' +str(i+1) +'.csv')
+        filename400_10 = os.path.join(script_dir,'Edgelists/E400_10_' +str(i+1) +'.csv')
+        filename500_10 = os.path.join(script_dir,'Edgelists/E500_10_' +str(i+1) +'.csv')
+        filename100_75 = os.path.join(script_dir,'Edgelists/E100_75_' +str(i+1) +'.csv')
+        filename200_75 = os.path.join(script_dir,'Edgelists/E200_75_' +str(i+1) +'.csv')
+        filename300_75 = os.path.join(script_dir,'Edgelists/E300_75_' +str(i+1) +'.csv')
+        filename400_75 = os.path.join(script_dir,'Edgelists/E400_75_' +str(i+1) +'.csv')
+        filename500_75 = os.path.join(script_dir,'Edgelists/E500_75_' +str(i+1) +'.csv')
         
-        g100_10[i] = graph_from_file(filename100,100)
-        g200_10[i] = graph_from_file(filename200,200)
-#        g300_10[i] = graph_from_file(filename300,300)
-#        g400_10[i] = graph_from_file(filename400,400)
-#        g500_10[i] = graph_from_file(filename500,500)
-#        
-#    r100to500 = [None]*5
-#    print('Running Dijkstra tests for 100 nodes...')
-#    r100to500[0] = repeat_timed_test(g100_10,1,100,numtests)
-#    print('Running Dijkstra tests for 200 nodes...')
-#    r100to500[1] = repeat_timed_test(g200_10,1,200,numtests)
-#    print('Running Dijkstra tests for 300 nodes...')
-#    r100to500[2]= repeat_timed_test(g300_10,1,300,numtests)
-#    print('Running Dijkstra tests for 400 nodes...')
-#    r100to500[3] = repeat_timed_test(g400_10,1,400,numtests)
-#    print('Running Dijkstra tests for 500 nodes...')
-#    r100to500[4] = repeat_timed_test(g500_10,1,500,numtests)
-#   
-#    for n in range(100,600,100):
-#        filename = 'results' +str(n)+'_10.csv'
-#        with open(filename,'wb') as f:
-#            writer = csv.writer(f,delimiter=',')
-#            for i in range(numtests):
-#                writer.writerow(r100to500[int(n/100)-1][i])
+        g100_10[i] = graph_from_file(filename100_10,100)
+        g200_10[i] = graph_from_file(filename200_10,200)
+        g300_10[i] = graph_from_file(filename300_10,300)
+        g400_10[i] = graph_from_file(filename400_10,400)
+        g500_10[i] = graph_from_file(filename500_10,500)
+        g100_75[i] = graph_from_file(filename100_75,100)
+        g200_75[i] = graph_from_file(filename200_75,200)
+        g300_75[i] = graph_from_file(filename300_75,300)
+        g400_75[i] = graph_from_file(filename400_75,400)
+        g500_75[i] = graph_from_file(filename500_75,500)
+        
+    r100to500_10 = [None]*5
+    print('Running Dijkstra tests for 100 nodes,10% density...')
+    r100to500_10[0] = repeat_timed_test(g100_10,1,100,numtests)
+    print('Running Dijkstra tests for 200 nodes,10% density...')
+    r100to500_10[1] = repeat_timed_test(g200_10,1,200,numtests)
+    print('Running Dijkstra tests for 300 nodes,10% density...')
+    r100to500_10[2]= repeat_timed_test(g300_10,1,300,numtests)
+    print('Running Dijkstra tests for 400 nodes,10% density...')
+    r100to500_10[3] = repeat_timed_test(g400_10,1,400,numtests)
+    print('Running Dijkstra tests for 500 nodes,10% density...')
+    r100to500_10[4] = repeat_timed_test(g500_10,1,500,numtests)
+    
+    r100to500_75 = [None]*5
+    print('Running Dijkstra tests for 100 nodes,75% density...')
+    r100to500_75[0] = repeat_timed_test(g100_75,1,100,numtests)
+    print('Running Dijkstra tests for 200 nodes,75% density...')
+    r100to500_75[1] = repeat_timed_test(g200_75,1,200,numtests)
+    print('Running Dijkstra tests for 300 nodes,75% density...')
+    r100to500_75[2]= repeat_timed_test(g300_75,1,300,numtests)
+    print('Running Dijkstra tests for 400 nodes,75% density...')
+    r100to500_75[3] = repeat_timed_test(g400_75,1,400,numtests)
+    print('Running Dijkstra tests for 500 nodes,75% density...')
+    r100to500_75[4] = repeat_timed_test(g500_75,1,500,numtests)
+  
+    for n in range(100,200,100):
+        
+        filename = 'results' +str(n)+'_10.csv'
+        with open(filename,'wb') as f:
+            writer = csv.writer(f,delimiter=',')
+            for i in range(numtests):
+                writer.writerow(r100to500_10[int(n/100)-1][i])
+        
+        filename = 'results' +str(n)+'_75.csv'
+        with open(filename,'wb') as f:
+            writer = csv.writer(f,delimiter=',')
+            for i in range(numtests):
+                writer.writerows(r100to500_75[int(n/100)-1][i])
                 
-    '''Testing by trying combinations of start/finish nodes
-    **Currently only runs test on one graph***'''
+    
+    '''Testing by trying all combinations of start/finish nodes
+    ***Currently only runs test on one graph..need to change hardcode to use different ones***'''
     
     sfnodes = list(combinations(range(1,200),2))
     results_combos = [None]*len(sfnodes)
@@ -117,4 +157,5 @@ if __name__ == '__main__':
             writer.writerow(row)
             
        
+   
     
