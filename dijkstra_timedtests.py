@@ -5,11 +5,12 @@ Created on Fri Dec  9 13:41:35 2016
 @author: montgomt
 """
 
-
+from imp import reload
 import csv
 from graph import Graph
 from time import time
 import dijkstrapy3
+reload(dijkstrapy3)
 
 
 '''create graph from file'''
@@ -29,7 +30,7 @@ def single_timed_test(g,u,v,structure):
     
     t0 = time()
     dijkstrapy3.dijkstra(g,g.get_vertex(u),structure)
-    target = g.get_vertext(v)
+    target = g.get_vertex(v)
     path = [target.get_id()]
     dijkstrapy3.shortest(target, path)
     t1 = time()
@@ -52,6 +53,8 @@ def repeat_timed_test(G,u,v,numtests):
 
     return results
     
+    
+'''run the tests when file is executed'''
 if __name__ == '__main__':
 
     numtests = 20
@@ -76,4 +79,22 @@ if __name__ == '__main__':
     results50_10 = repeat_timed_test(g50_10,1,50,numtests)
     results75_10 = repeat_timed_test(g75_10,1,75,numtests)
     
-   
+    with open('results25_10.csv','wb') as f25:
+        csv25 = csv.writer(f25)
+        for i in range(numtests):
+            csv25.writerow(results25_10[i])
+    
+    with open('results50_10.csv','wb') as f50:
+        csv50 = csv.writer(f50)
+        for i in range(numtests):
+            csv50.writerow(results50_10[i])
+            
+    with open('results75_10.csv','wb') as f75:
+        csv75 = csv.writer(f75)
+        for i in range(numtests):
+            csv75.writerow(results75_10[i])
+            
+    for row in results25_10:
+        print(row)
+ 
+    
