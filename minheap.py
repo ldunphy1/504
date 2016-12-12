@@ -13,6 +13,8 @@ class MinHeap:
         def __init__(self,value, key):  # key is vertex, value is weight
             self.value = value
             self.key = key
+            #self.parent = self.child = None
+            #self.left = self.right = None
                 
         def __str__(self):
             return str(self.value)
@@ -22,7 +24,7 @@ class MinHeap:
         self.count = len(A)
         if self.A:  
             self.build_heap(self.A)
-            self.minimum = self.A[0].value
+            self.minimum = self.A[0]
         else:
             self.minimum = None
             
@@ -63,14 +65,15 @@ class MinHeap:
     def insertNode(self,value,key): #value is weight, key is reference to vertex
         '''appends new node with max value, then decreases its value to desired number'''
         self.count +=1 
-        n = self.node(float('inf'),key)
-        self.A.append(n)
+        n = self.node(float('inf'),key) #value is the weight
+        self.A.insert(0,n)
         self.decrease_key(self.count-1,value)
+        self.minHeapify()
         
     def decrease_key(self,i,value):
         A = self.A
         if value > A[i].value:
-            print('error new value is larger than current key')
+            #print('error new value is larger than current key')
             return
             
         A[i].value = value
@@ -92,7 +95,13 @@ class MinHeap:
         del A[bh.count-1:] #truncate array by 1
         bh.count -= 1
         self.__minHeapify(A,0)
-        return ref_to_min
+        return ref_to_min.value, ref_to_min.key
+
+    def emptyHeap(self):
+        #empty the heap quickly 
+        self.minimum = None
+        self.count = 0
+        self.A = []
         
     def parent(self,i):
         return int(m.floor((i-1)/2))
