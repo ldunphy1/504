@@ -68,9 +68,6 @@ def dijkstra(aGraph, start, queue = "FibHeap"):
 		print("Using Fiobonnaci Heap Structure...\n")
 		# Initialize new FibHeap
 		obj = FibHeap()
-	elif queue == "Heapq":
-		#print("Using Heapq Data Structure From Python...\n")
-		pyheap = True
 	elif queue == "MinHeap":
 		#print("Using Heapq Data Structure From Python...\n")
 		minheap = True  
