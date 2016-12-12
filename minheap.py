@@ -65,7 +65,7 @@ class MinHeap:
         self.count +=1 
         n = self.node(float('inf'),key) #value is the weight
         self.A.insert(0,n)
-        self.decrease_key(self.count-1,value)
+        self.decrease_key(0,value)
         self.minHeapify()
         
     def decrease_key(self,i,value):
@@ -82,17 +82,14 @@ class MinHeap:
             i = self.parent(i)
             
     def extractMin(self):
-        bh = self
-        A = bh.A
         if self.count <0:
             print('error - heap underflow')
             return
             
-        ref_to_min = A[0]
-        A[0] = A[1]
-        del A[:bh.count-1] #truncate array by 1
-        bh.count -= 1
-        self.__minHeapify(A,0)
+        ref_to_min = self.A[0]
+        self.A.remove(self.A[0]) #remove from list
+        self.count -= 1
+        self.__minHeapify(self.A,0)
         return ref_to_min.value, ref_to_min.key
 
     def emptyHeap(self):
@@ -105,7 +102,7 @@ class MinHeap:
         return int(m.floor((i-1)/2))
         
     def left(self,i):
-        return int((2*i) + 1)
+        return int((i) + 1)
     
     def right(self,i):
-        return int((2*(i) + 2))
+        return int(((i) + 2))
