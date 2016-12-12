@@ -67,6 +67,7 @@ class MinHeap:
         self.A.insert(0,n)
         self.decrease_key(0,value)
         self.minHeapify()
+        print n.value
         
     def decrease_key(self,i,value):
         A = self.A
