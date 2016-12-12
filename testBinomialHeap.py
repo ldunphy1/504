@@ -13,16 +13,24 @@ class BinomialTest(unittest.TestCase):
 
 
     def setUp(self):
-        self.H = BinomialHeap()
-        vals = list(range(1,26))
-        random.shuffle(vals)
-        
-        '''insert random values into structure'''
-        for i in vals:
-            self.H.insertNode(i,str(i))  
+		self.H = BinomialHeap()
+		vals = list(range(1,26))
+		random.shuffle(vals)
+		for i in vals:
+			self.H.insertNode(i,str(i))
+		self.H2 = BinomialHeap()
+		vals = list(range(26,50))
+		random.shuffle(vals)
+		for i in vals:
+			self.H2.insertNode(i,str(i))
             
     def test_findMin(self):
         self.assertEqual(self.H.findMin().value,1)
+		
+	def test_union(self):
+		self.H.union(self.H2)
+		d, k = self.H.findMin()
+		self.assertEqual(d, -10)
 
     def test_extractMin(self):
         '''test extract min'''
