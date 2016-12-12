@@ -120,21 +120,20 @@ if __name__ == '__main__':
 	g.add_vertex('c')
 	g.add_vertex('d')
 	g.add_vertex('e')
-	g.add_vertex('f')
-	g.add_vertex('g') 
+	g.add_vertex('f') 
 
-	g.add_edge('a', 'b', 7)  
-	g.add_edge('a', 'c', 9)
-	g.add_edge('a', 'f', 14)
-	g.add_edge('b', 'c', 10)
-	g.add_edge('b', 'd', 15)
-	g.add_edge('c', 'd', 11)
-	g.add_edge('c', 'f', 2)
-	g.add_edge('d', 'e', 6)
-	g.add_edge('e', 'f', 9)
-	g.add_edge('e', 'g', 18)
-	g.add_edge('c','e', 5)
-	g.add_edge('f','g', 4)
+	g.add_edge('a', 'b', 2)  
+	g.add_edge('a', 'd', 5)
+	g.add_edge('a', 'e', 4)
+	g.add_edge('b', 'c', 11)
+	g.add_edge('d', 'e', 13)
+	g.add_edge('d', 'f', 7)
+	g.add_edge('e', 'b', 1)
+	g.add_edge('e', 'c', 7)
+	g.add_edge('b', 'c', 11)
+	g.add_edge('c', 'f', 1)
+	g.add_edge('e', 'f', 3)
+
 
 #	print ("Graph data:")
 #	for v in g:
@@ -145,9 +144,9 @@ if __name__ == '__main__':
 
 	print( "Starting time to calc shortest path in graph...\n")
 	t0 = time() #start
-	dijkstra(g, g.get_vertex('a'), "MinHeap") 
+	dijkstra(g, g.get_vertex('a'), "FibHeap") 
 
-	target = g.get_vertex('g')
+	target = g.get_vertex('f')
 	path = [target.get_id()]
 	shortest(target, path)
 	print ('The shortest path : %s' %(path[::-1]))

@@ -26,7 +26,6 @@ class FibHeap:
 		node = self.Node(data, key)
 		node.left = node.right = node
 		self.min = self.addToRoot(self.min, node)
-		print(node.data)
 
 		if self.min is None or node.data < self.min.data:
 			self.min = node
