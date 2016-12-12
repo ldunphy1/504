@@ -1,7 +1,25 @@
 # -*- coding: utf-8 -*-
 """
 Based on max-heap pseudocode from CLRS.  **Note: Python indexing starts from 0,
-whereas CLRS starts from 1, leading to minor differences in the code here.
+whereas CLRS starts from 1, leading to minor differences in the code here
+
+This implementation stores and operates on value,key pairs.  'value' refers to
+the numerical value and 'key' refers to the label for the node object we're storing.
+If working solely with numbers, you can use key = str(value).
+
+
+So, example use would be:
+
+from minheap import MinHeap
+
+H = MinHeap()
+H.insertNode(5,str(5)) 
+
+or 
+
+H.insertNode(5,'a') 
+
+
 """
 
 import math as m
