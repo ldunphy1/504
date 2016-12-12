@@ -13,7 +13,7 @@
 * dijkstra.py - Executing this file from the command prompt will run an example of Dijkstra'so algorithm.  
 
 **_Graphing_**
-* Edgelists folier (these were the source edge lists for graphs used in our timing tests of Dijkstra with different inputs.
+* Edgelists folder (these were the source edge lists for graphs used in our timing tests of Dijkstra with different inputs.
 * edgelist_creation.m - this was used to create random graphs.  Included here for informational purposes. 
 * graph.py - dependent file for dijkstra.py
 * vertex.py - dependent file for dijkstra.py
