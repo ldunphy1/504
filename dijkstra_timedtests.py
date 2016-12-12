@@ -45,15 +45,14 @@ def repeat_timed_test(G,u,v,numtests):
     times using all three data structures.  Returns results as a 2D list, with rows 
     representing test and columns representing data structure result for that test.'''
     
-    results = [[None,None,None] for i in range(numtests)]
+    #results = [[None,None,None] for i in range(numtests)]
     for i in range(numtests):
         print(' Running Test #',i)
         bin_duration = single_timed_test(G[i],str(u),str(v),'Binomial')
         fib_duration = single_timed_test(G[i],str(u),str(v),'FibHeap')
-        minh_duration = single_timed_test(G[i],str(u),str(v),'Heapq')
+        minh_duration = single_timed_test(G[i],str(u),str(v),'MinHeap')
         
         results[i] = [bin_duration,fib_duration,minh_duration]
-
     return results
     
 '''------------run the tests when file is executed--------------'''
