@@ -1,7 +1,24 @@
 
 # -*- coding: utf-8 -*-
 """
-Binomial Heap based on pseudocode found in Ch. 19 of CLRS 'Intro. to Algorithms' (2001) 
+Binomial Heap based on pseudocode found in Ch. 19 of CLRS 'Intro. to Algorithms' (2001)
+
+
+This implementation stores and operates on value,key pairs.  'value' refers to
+the numerical value and 'key' refers to the label for the node object we're storing.
+If working solely with numbers, you can use key = str(value).
+
+
+So, example use would be:
+
+from binomialheap import BinomialHeap
+
+H = BinomialHeap()
+H.insertNode(5,str(5)) 
+
+or 
+
+H.insertNode(5,'a') 
 """
       
 class BinomialHeap():
