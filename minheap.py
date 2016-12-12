@@ -13,8 +13,6 @@ class MinHeap:
         def __init__(self,value, key):  # key is vertex, value is weight
             self.value = value
             self.key = key
-            #self.parent = self.child = None
-            #self.left = self.right = None
                 
         def __str__(self):
             return str(self.value)
@@ -91,8 +89,8 @@ class MinHeap:
             return
             
         ref_to_min = A[0]
-        A[0] = A[bh.count-1]
-        del A[bh.count-1:] #truncate array by 1
+        A[0] = A[1]
+        del A[:bh.count-1] #truncate array by 1
         bh.count -= 1
         self.__minHeapify(A,0)
         return ref_to_min.value, ref_to_min.key
