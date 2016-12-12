@@ -1,6 +1,23 @@
 """
 Fib Heap implementation
 
+
+This implementation stores and operates on data,key pairs.'data' refers to
+the numerical value and 'key' refers to the label for the node object we're storing.
+If working solely with numbers, you can use key = str(data).
+
+
+So, example use would be:
+
+from fibHeapFinal import FibHeap
+
+H = FibHeap()
+H.insertNode(5,str(5)) 
+
+or 
+
+H.insertNode(5,'a')
+
 """
 import math
 
