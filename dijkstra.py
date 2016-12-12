@@ -144,7 +144,7 @@ if __name__ == '__main__':
 
 	print( "Starting time to calc shortest path in graph...\n")
 	t0 = time() #start
-	dijkstra(g, g.get_vertex('a'), "FibHeap") 
+	dijkstra(g, g.get_vertex('a'), "MinHeap") 
 
 	target = g.get_vertex('f')
 	path = [target.get_id()]
