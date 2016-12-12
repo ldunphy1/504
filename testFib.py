@@ -28,7 +28,6 @@ class TestFib(unittest.TestCase):
 	def test_findMin(self):
 		d, k = self.heap.findMin()
 		self.assertEqual(d, 0)
-		d, k = self.heap.findMin()
 		print("findMin: OK")
 
 	def test_mergeHeap(self):
@@ -41,6 +40,7 @@ class TestFib(unittest.TestCase):
 		self.heap.extractMin()
 		d, k = self.heap.findMin()
 		self.assertEqual(d, 0)
+		
 	def test_delete(self):
 		self.heap.extractMin() # extract min to rearrange heap
 		temp = self.heap.findMin()
@@ -48,7 +48,6 @@ class TestFib(unittest.TestCase):
 		self.assertEqual(find, -1) # key should not be in the heap anymore
 
 if __name__ == '__main__':
-	#unittest.main()
 
 	print("running tests on FibHeap...")
 	unittest.main()
