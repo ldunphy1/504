@@ -74,128 +74,44 @@ def dijkstra(aGraph, start, queue = "FibHeap"):
 	elif queue == "MinHeap":
 		#print("Using Heapq Data Structure From Python...\n")
 		minheap = True  
+		obj = MinHeap()
 	elif queue == "Binomial":
 		#print("Using Binomial Heap Structure...\n")
 		obj = BinomialHeap()
 
-	if not pyheap and not minheap:
+	#Build the heap
+
+	for index, item in enumerate(unvisited_queue):
+		obj.insertNode(item[1].get_distance(), item)
+		for next in item[1].adjacent:
+			obj.insertNode(item[1].get_weight(next) + item[1].get_distance(), next) #store in tree based on weights
+			
+	
+	while(len(unvisited_queue)):
+		min, key = obj.extractMin()
+		current = key[1]
+		current.set_visited() #set vertex to visited 
+
+		# now visit adj nodes
+		for next in current.adjacent:
+			#if already visited just skip
+			if next.visited:
+				continue
+			new_dist = current.get_distance() + current.get_weight(next)
+
+			#check if new_dist is smaller
+			if new_dist < next.get_distance():
+				next.set_distance(new_dist)
+				next.set_previous(current)
+				#print( 'updated : current = %s next = %s new_dist = %s' % (current.get_id(), next.get_id(), next.get_distance()))
+		# Empty and Rebuild heap
+		obj.emptyHeap()
+		unvisited_queue = [(v.get_distance, v) for v in aGraph if not v.visited]
 		for index, item in enumerate(unvisited_queue):
 			obj.insertNode(item[1].get_distance(), item)
 			for next in item[1].adjacent:
 				obj.insertNode(item[1].get_weight(next) + item[1].get_distance(), next) #store in tree based on weights
-		
-		while(len(unvisited_queue)):
-			min, key = obj.extractMin()
-			#print(key)
-			current = key[1]
-			#print(current)
-			current.set_visited() #set vertex to visited 
 
-			# now visit adj nodes
-			for next in current.adjacent:
-				#if already visited just skip
-				if next.visited:
-					#print("adj node already visited")
-					continue
-				new_dist = current.get_distance() + current.get_weight(next)
-
-				#check if new_dist is smaller
-				if new_dist < next.get_distance():
-					next.set_distance(new_dist)
-					next.set_previous(current)
-					#print( 'updated : current = %s next = %s new_dist = %s' % (current.get_id(), next.get_id(), next.get_distance()))
-			# rebuild heap
-			obj.emptyHeap()
-			unvisited_queue = [(v.get_distance, v) for v in aGraph if not v.visited]
-			for index, item in enumerate(unvisited_queue):
-				obj.insertNode(item[1].get_distance(), item)
-				for next in item[1].adjacent:
-					 obj.insertNode(item[1].get_weight(next) + item[1].get_distance(), next) #store in tree based on weights
-
-	if (minheap):
-             obj = MinHeap()
-             for index, item in enumerate(unvisited_queue):
-                 obj.insertNode(item[1].get_distance(), item)
-                 
-             obj.minHeapify()
-             
-             #print(obj)
-             
-             print('running dijkstra')
-             while (len(unvisited_queue)):               
-                 #pop vertex with smallest distance
-                 min = obj.extractMin()
-                 min = min.key #This should be a reference to a (distance,vertex) tuple
-                 current = min[1] 
-                 print( current)
-                 current.set_visited()
-                 
-                 #for next in v.adj
-                 for next in current.adjacent:
-                     #if visited we dont care so skip
-                     if next.visited:
-                         #print( "adj node has been visited already")
-                         continue
-                     
-                     new_dist = current.get_distance() + current.get_weight(next)                  
-                     if new_dist < next.get_distance():
-                         next.set_distance(new_dist)
-                         next.set_previous(current)
-                         
-                         print('  updated : current = %s next = %s new_dist = %s' % (current.get_id(), next.get_id(), next.get_distance()))
-                     
-                 #Rebuild heap
-                 #1. Pop every item
-                 while len(obj.A):
-                     obj.extractMin()
-                     
-                 #2. Put all vertices not visited into the queue    
-                 unvisited_queue = [(v.get_distance(),v) for v in aGraph if not v.visited]
-                 
-                 for index, item in enumerate(unvisited_queue):
-                     obj.insertNode(item[1].get_distance(), item)
-                 obj.minHeapify()
-                 #print(obj)
-
-	if (pyheap):
-		heapq.heapify(unvisited_queue) #add unvisted nodes to heap
-		L= [] #add unvisted nodes to heap   
-		for index,item in enumerate(unvisited_queue):
-                      L.append(item[1].get_distance())
-                          
-		while (len(unvisited_queue)):
-			#pop vertex with smallest distance
-			#for index, item in enumerate(unvisited_queue):
-				#print( index, item[1].get_distance())
-			min = heapq.heappop(unvisited_queue)
-			current = min[1]
-			print( current)
-			current.set_visited()
-			
-			#for next in v.adj
-			for next in current.adjacent:
-                           #if visited we dont care so skip
-                           if next.visited:
-                               #print( "adj node has been visited already")
-                               continue
-                           new_dist = current.get_distance() + current.get_weight(next)                          
-                           if new_dist < next.get_distance():
-                               next.set_distance(new_dist)
-                               next.set_previous(current)
-                               print( 'updated : current = %s next = %s new_dist = %s' % (current.get_id(), next.get_id(), next.get_distance()))
-
-			#Rebuild heap
-			#1. Pop every item
-			while len(unvisited_queue):
-				heapq.heappop(unvisited_queue)
-			
-			#2. Put all vertices not visited into the queue
-			unvisited_queue = [(v.get_distance(),v) for v in aGraph if not v.visited]
-
-			heapq.heapify(unvisited_queue)
-			L= [] #add unvisted nodes to heap   
-			for index,item in enumerate(unvisited_queue):
-                              L.append(item[1].get_distance())
    
 
 if __name__ == '__main__':
