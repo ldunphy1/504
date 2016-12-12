@@ -24,12 +24,12 @@ class BinomialTest(unittest.TestCase):
 			self.H2.insertNode(i,str(i))
 
 	def test_findMin(self):
-		self.assertEqual(self.H.findMin().value,1)
+		self.assertEqual(self.H.findMin().value, 1)
 
 	def test_union(self):
 		self.H.union(self.H2)
 		d = self.H.findMin()
-		self.assertEqual(d.value, -10)
+		self.assertEqual(d.value, 1)
 
 	def test_extractMin(self):
 		expectedmin = 1
