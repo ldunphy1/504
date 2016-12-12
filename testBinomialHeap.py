@@ -26,36 +26,26 @@ class BinomialTest(unittest.TestCase):
             
     def test_findMin(self):
         self.assertEqual(self.H.findMin().value,1)
-		
+	
 	def test_union(self):
 		self.H.union(self.H2)
 		d, k = self.H.findMin()
 		self.assertEqual(d, -10)
-
-    def test_extractMin(self):
-        '''test extract min'''
-        expectedmin = 1
-        for _ in range(self.H.count):
-            #empty the heap to completion
-            self.assertEqual(self.H.extractMin()[0],expectedmin)
-            expectedmin += 1
-            
-    def test_delete(self):
-        minnode = self.H.findMin()
-        self.assertEqual(minnode.value,1)        
-        self.H.delete(minnode) #minimum should now be 2
-        minnode = self.H.findMin()
-        self.assertEqual(minnode.value,2) #this works if we deleted the proper node
-            
-
-if __name__ == '__main__':
-    unittest.main()
-        
-
-   
-
-
-        
-
-        
-            
+	
+	def test_extractMin(self):
+		'''test extract min'''
+		expectedmin = 1
+		for _ in range(self.H.count):
+			#empty the heap to completion
+			self.assertEqual(self.H.extractMin()[0],expectedmin)
+			expectedmin += 1
+	
+	def test_delete(self):
+		minnode = self.H.findMin()
+		self.assertEqual(minnode.value,1)
+		self.H.delete(minnode) #minimum should now be 2
+		minnode = self.H.findMin()
+		self.assertEqual(minnode.value,2) #this works if we deleted the proper node
+	
+	if __name__ == '__main__':
+	unittest.main()
